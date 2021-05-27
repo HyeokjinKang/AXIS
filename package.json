@@ -1,0 +1,22 @@
+{
+  "name": "axis",
+  "description": "삼성SDS-JA Korea 스마트해커톤 출전을 위한 프로젝트",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HyeokjinKang/AXIS-backend.git"
+  },
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/HyeokjinKang/AXIS-backend/issues"
+  },
+  "homepage": "https://github.com/HyeokjinKang/AXIS-backend#readme"
+}
