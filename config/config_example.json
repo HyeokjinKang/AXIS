@@ -1,0 +1,6 @@
+{
+  "db": {
+    "uri": "service uri",
+    "name": "db name"
+  }
+}
