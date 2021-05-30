@@ -28,6 +28,9 @@ mongoose.connect(config.db.uri, {
   .catch(err => {
     console.log(err);
   });
+
+app.get('/', (req, res) => {
+  res.send("hi");
 });
 
 
