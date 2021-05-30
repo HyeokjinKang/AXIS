@@ -74,8 +74,27 @@ app.post('/auth/user', (req, res) => {
   });
 });
 
-app.get('/', (req, res) => {
-  res.send("Hello, world!");
+app.post('/auth/store', async (req, res) => {
+  const name = req.body.name;
+  const username = req.body.username.toLowerCase();
+  const newStore = new Store({
+    name: name,
+    username: username,
+    updated: false,
+  });
+  newStore.save()
+    .then(() => {
+      res.status(200).json({
+        result: "success"
+      });
+    })
+    .catch(err => {
+      res.status(400).json({
+        result: "failed",
+        detail: err
+      });
+      return;
+    });
 });
 
 app.listen(port, () => {
