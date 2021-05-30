@@ -1,17 +1,32 @@
-const app = require('express')();
+//config
 const config = require('./config/config.json');
-const MongoClient = require('mongodb').MongoClient;
 
-const client = new MongoClient(config.db.uri, { useNewUrlParser: true, useUnifiedTopology: true });
+//libraries
+const hasher = require("pbkdf2-password")();
+const express = require('express');
+const mongoose = require('mongoose');
 
+//schemas
+const User = require('./schemas/user');
+const Store = require('./schemas/store');
+
+//express environment
 const port = process.env.PORT || 80;
+const app = express();
 
-client.connect(err => {
-  const collection = client.db(config.db.name).collection("users");
-  collection.find({}).toArray((err, docs) => {
+//express settings
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+mongoose.connect(config.db.uri, {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useUnifiedTopology: true,
+}).then(() => {
+    console.log("Connected to MongoDB");
+  })
+  .catch(err => {
     console.log(err);
-    console.log(docs);
-    client.close();
   });
 });
 
