@@ -34,44 +34,54 @@ app.get('/', (req, res) => {
 });
 
 app.post('/auth/user', (req, res) => {
-  hasher({
-    password: req.body.password,
-  },
-  async (err, pass, salt, hash) => {
-    const username = req.body.username.toLowerCase();
-    let users = await Users.find({
-      username: username
-    });
-    if(users.length) {
-      res.status(400).json({
-        result: "failed",
-        detail: {
-          error: "Exist username",
-          description: "이미 존재하는 이름입니다."
-        }
+  if(req.body.username && req.body.password) {
+    hasher({
+      password: req.body.password,
+    },
+    async (err, pass, salt, hash) => {
+      const username = req.body.username.toLowerCase();
+      let users = await User.find({
+        username: username
       });
-      return;
-    }
-    const newUser = new User({
-      username: username,
-      salt: salt,
-      hash: hash,
-      updated: false,
-    });
-    newUser.save()
-      .then(() => {
-        res.status(200).json({
-          result: "success"
-        });
-      })
-      .catch(err => {
+      if(users.length) {
         res.status(400).json({
           result: "failed",
-          detail: err
+          detail: {
+            error: "Exist username",
+            description: "이미 존재하는 이름입니다."
+          }
         });
         return;
+      }
+      const newUser = new User({
+        username: username,
+        salt: salt,
+        hash: hash,
+        updated: false,
       });
-  });
+      newUser.save()
+        .then(() => {
+          res.status(200).json({
+            result: "success"
+          });
+        })
+        .catch(err => {
+          res.status(400).json({
+            result: "failed",
+            detail: err
+          });
+          return;
+        });
+    });
+  } else {
+    res.status(400).json({
+      result: "failed",
+      detail: {
+        error: "Data format error.",
+        description: "잘못 입력된 데이터가 있습니다."
+      }
+    });
+  }
 });
 
 app.post('/auth/store', async (req, res) => {
