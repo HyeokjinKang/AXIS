@@ -1,5 +1,5 @@
 //config
-const config = require('./config/config.json');
+const config = require('../../config/config.json');
 
 //libraries
 const hasher = require("pbkdf2-password")();
@@ -7,8 +7,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 //schemas
-const User = require('./schemas/user');
-const Store = require('./schemas/store');
+const User = require('../../schemas/user');
+const Store = require('../../schemas/store');
 
 //express environment
 const port = process.env.PORT || 80;
