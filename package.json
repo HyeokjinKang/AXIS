@@ -10,7 +10,8 @@
     "supervisor": "^0.12.0"
   },
   "scripts": {
-    "start": "node src/api/index.js"
+    "api": "supervisor src/api/index.js",
+    "front": "supervisor src/frontEnd/index.js"
   },
   "repository": {
     "type": "git",
