@@ -11,7 +11,7 @@ const User = require('../../schemas/user');
 const Store = require('../../schemas/store');
 
 //express environment
-const port = process.env.PORT || 80;
+const port = 1024;
 const app = express();
 
 //express settings
