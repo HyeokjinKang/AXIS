@@ -160,6 +160,22 @@ app.post("/auth/login", async (req, res) => {
   }
 });
 
+app.get("/auth/user", async (req, res) => {
+  if (req.session.user) {
+    res.status(200).json({
+      result: "success",
+      data: req.session.user,
+    });
+  } else {
+    res.status(400).json({
+      result: "failed",
+      detail: {
+        error: "Session not available",
+        description: "세션이 존재하지 않습니다.",
+      },
+    });
+  }
+});
 app.post("/auth/store", async (req, res) => {
   const name = req.body.name;
   const username = req.body.username.toLowerCase();
