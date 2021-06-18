@@ -210,6 +210,19 @@ app.get("/auth/store", async (req, res) => {
 app.post("/auth/store", async (req, res) => {
   const name = req.body.name;
   const username = req.body.username.toLowerCase();
+  let stores = await Store.find({
+    name: name,
+  });
+  if (stores.length) {
+    res.status(400).json({
+      result: "failed",
+      detail: {
+        error: "Exist name",
+        description: "이미 존재하는 이름입니다.",
+      },
+    });
+    return;
+  }
   const newStore = new Store({
     name: name,
     username: username,
