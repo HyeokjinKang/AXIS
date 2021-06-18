@@ -176,6 +176,37 @@ app.get("/auth/user", async (req, res) => {
     });
   }
 });
+
+app.get("/auth/store", async (req, res) => {
+  if (req.session.user) {
+    let stores = await Store.find({
+      username: req.session.user,
+    });
+    if (stores.length) {
+      res.status(200).json({
+        result: "success",
+        data: stores,
+      });
+    } else {
+      res.status(400).json({
+        result: "failed",
+        detail: {
+          error: "Store doesn't exist.",
+          description: "등록된 매장이 없습니다.",
+        },
+      });
+    }
+  } else {
+    res.status(400).json({
+      result: "failed",
+      detail: {
+        error: "Session not available",
+        description: "세션이 존재하지 않습니다.",
+      },
+    });
+  }
+});
+
 app.post("/auth/store", async (req, res) => {
   const name = req.body.name;
   const username = req.body.username.toLowerCase();
