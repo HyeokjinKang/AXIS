@@ -1,31 +1,51 @@
 //config
-const config = require('../../config/config.json');
+const config = require("../../config/config.json");
 
 //libraries
 const hasher = require("pbkdf2-password")();
-const express = require('express');
-const mongoose = require('mongoose');
+const express = require("express");
+const session = require("express-session");
+const mongoose = require("mongoose");
 
 //schemas
-const User = require('../../schemas/user');
-const Store = require('../../schemas/store');
+const User = require("../../schemas/user");
+const Store = require("../../schemas/store");
 
 //express environment
 const port = 1024;
 const app = express();
 
 //express settings
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-mongoose.connect(config.db.uri, {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useUnifiedTopology: true,
-}).then(() => {
+app.use(
+  session({
+    key: config.session.key,
+    secret: config.session.secret,
+    resave: config.session.resave,
+    saveUninitialized: config.session.saveUninitialized,
+  })
+);
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "http://127.0.0.1:1026");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.header("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE");
+  res.header("Access-Control-Allow-Credentials", "true");
+  next();
+});
+
+mongoose
+  .connect(config.db.uri, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
     console.log("Connected to MongoDB");
   })
-  .catch(err => {
+  .catch((err) => {
     console.log(err);
   });
 
