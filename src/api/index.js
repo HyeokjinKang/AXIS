@@ -107,14 +107,55 @@ app.post("/auth/join", async (req, res) => {
   }
 });
 
+app.post("/auth/login", async (req, res) => {
+  if (req.body.username && req.body.password) {
+    const username = req.body.username.toLowerCase();
+    let users = await User.find({
+      username: username,
     });
+    if (users.length) {
+      hasher(
+        {
+          password: req.body.password,
+          salt: users[0].salt,
+        },
+        async (err, pass, salt, hash) => {
+          if (hash == users[0].hash) {
+            req.session.user = users[0].username;
+            req.session.save(() => {
+              res.status(200).json({
+                result: "success",
+              });
+            });
+          } else {
+            res.status(400).json({
+              result: "failed",
+              detail: {
+                error: "Password doesn't match",
+                description: "비밀번호가 일치하지 않습니다.",
+              },
+            });
+            return;
+          }
+        }
+      );
+    } else {
+      res.status(400).json({
+        result: "failed",
+        detail: {
+          error: "Username doesn't match",
+          description: "존재하지 않는 유저입니다.",
+        },
+      });
+      return;
+    }
   } else {
     res.status(400).json({
       result: "failed",
       detail: {
         error: "Data format error.",
-        description: "잘못 입력된 데이터가 있습니다."
-      }
+        description: "잘못 입력된 데이터가 있습니다.",
+      },
     });
   }
 });
