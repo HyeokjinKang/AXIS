@@ -10,6 +10,7 @@ const mongoose = require("mongoose");
 //schemas
 const User = require("../../schemas/user");
 const Store = require("../../schemas/store");
+const Menu = require("../../schemas/menu");
 
 //express environment
 const port = 1024;
@@ -202,6 +203,36 @@ app.get("/auth/store", async (req, res) => {
       detail: {
         error: "Session not available",
         description: "세션이 존재하지 않습니다.",
+      },
+    });
+  }
+});
+
+app.post("/menu", async (req, res) => {
+  if (req.session.user && req.body.store) {
+    let menus = await Menu.find({
+      store: req.body.store,
+    });
+    if (menus.length) {
+      res.status(200).json({
+        result: "success",
+        data: menus,
+      });
+    } else {
+      res.status(400).json({
+        result: "failed",
+        detail: {
+          error: "No menu",
+          description: "메뉴가 존재하지 않습니다.",
+        },
+      });
+    }
+  } else {
+    res.status(400).json({
+      result: "failed",
+      detail: {
+        error: "Data not available",
+        description: "세션 또는 데이터가 존재하지 않습니다.",
       },
     });
   }
