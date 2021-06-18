@@ -1,8 +1,8 @@
 //config
-const config = require('../../config/config.json');
+const config = require("../../config/config.json");
 
 //libraries
-const express = require('express');
+const express = require("express");
 
 //express environment
 const port = 1025;
@@ -12,8 +12,8 @@ const app = express();
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/../../views");
 
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/../../public"));
 
 app.get('/', (req, res) => {
