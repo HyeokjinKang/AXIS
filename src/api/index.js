@@ -160,7 +160,7 @@ app.post("/auth/login", async (req, res) => {
   }
 });
 
-app.post('/auth/store', async (req, res) => {
+app.post("/auth/store", async (req, res) => {
   const name = req.body.name;
   const username = req.body.username.toLowerCase();
   const newStore = new Store({
@@ -168,16 +168,17 @@ app.post('/auth/store', async (req, res) => {
     username: username,
     updated: false,
   });
-  newStore.save()
+  newStore
+    .save()
     .then(() => {
       res.status(200).json({
-        result: "success"
+        result: "success",
       });
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(400).json({
         result: "failed",
-        detail: err
+        detail: err,
       });
       return;
     });
